@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import Navigation from './components/Navigation';
+import Header from './components/Header';
+import Tabs from './components/Tabs';
+import Divider from './components/Divider';
 
-export default App;
+const tabs = [
+	{
+		heading: "Mission & Vision",
+		content: <>m&v</>
+	},
+	{
+		heading: "Strategic Business Objectives",
+		content: <>sbo</>
+	},
+
+]
+
+export default () => {
+	return (
+		<>
+			<Navigation />
+			
+			<main className="bg-neutral-100 min-h-[calc(100vh-72px)]">	
+			
+				<article className='mx-[38px] flex flex-col gap-6 py-6  xl:max-w-screen-xl xl:mx-auto'>
+
+					<Header content='Set Security Strategy'/>
+					<Divider />
+					<Tabs tabGroup={{tabs}}/>
+
+				</article>
+			
+			</main>
+		</>
+  	);
+}
