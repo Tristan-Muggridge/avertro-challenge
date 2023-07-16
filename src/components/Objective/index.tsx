@@ -4,6 +4,7 @@ import {BiPlus} from 'react-icons/bi';
 import Button from '../Button';
 import { AiFillCalendar } from 'react-icons/ai'
 import MinusIcon from '../../UI/MinusIcon';
+import generateUUID from "../../util/GenerateUUID";
 
 interface Props {
     objective: IObjective;
@@ -87,7 +88,7 @@ const Objective = ({objective, index}:Props) => {
                         form.keyMeasures.length < 3 &&
                         <button
                             type='button'
-                            onClick={() => handleChange('keyMeasures', [...form.keyMeasures, {id: new Date().getMilliseconds(), name: ''}])}
+                            onClick={() => handleChange('keyMeasures', [...form.keyMeasures, {id: generateUUID(), name: ''}])}
                             className='text-avertroBlue flex gap-2 items-center font-medium font-inter text-sm flex-wrap justify-center' >
                             
                             Add additional key measure

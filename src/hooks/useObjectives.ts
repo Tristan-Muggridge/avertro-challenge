@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import LocalStorage from '../LocalStorage';
+import LocalStorage from '../util/LocalStorage';
 import { Objective } from '@/types';
 
 const ls = LocalStorage.getInstance();
@@ -10,8 +10,11 @@ const useObjectives = () => {
 
     useEffect(() => {
         const objectives = ls.get<Objective>("objectives");
-        console.debug(objectives)
     }, [])
+
+    useEffect( () => {
+        ls.set("objectives", objectives);
+    }, [objectives])
 
     return {objectives, setObjectives}
 }

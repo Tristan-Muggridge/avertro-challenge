@@ -1,14 +1,15 @@
-import PlusIcon from "../..//UI/PlusIcon";
+import generateUUID from "../..//util/GenerateUUID";
+import PlusIcon from "../../UI/PlusIcon";
 import useObjectives from "../../hooks/useObjectives";
 import Button from "../Button";
 import Objective from "../Objective";
 
 const mock = {
-    id: 1,
+    id: generateUUID(),
     name: 'Reduce Risk',
     keyMeasures: [
         {
-            id: 1,
+            id: generateUUID(),
             name: 'First Key Measure',
         }
     ],
@@ -19,19 +20,27 @@ const mock = {
 }
 
 const Objectives = () => {
-    const { objectives } = useObjectives();
+    const { objectives, setObjectives } = useObjectives();
+    
+    const createObjective = () => {
+        setObjectives([...objectives, mock])
+    }
+    
     return (
         <div className="flex flex-col gap-8 px-2">
             {
-                [mock, mock, ...objectives].map((objective, index) => <Objective {...{objective, key: objective.id, index}} />)
+                objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index}} />)
             }
 
-            <div className="self-end">
-                <Button>
-                    <PlusIcon className="text-avertroBlue bg-white" />
-                    Add Objective
-                </Button>
-            </div>
+            {
+                objectives.length < 3 &&
+                <div className="self-end">
+                    <Button onClick={createObjective}>
+                        <PlusIcon className="text-avertroBlue bg-white" />
+                        Add Objective
+                    </Button>
+                </div>
+            }
         </div>
     )
 }

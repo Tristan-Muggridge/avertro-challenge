@@ -1,5 +1,5 @@
 
-import { ILocalStorage } from "./types";
+import { ILocalStorage } from "../types";
 
 class LocalStorage implements ILocalStorage {
     get<T>(key:string): T | null {

@@ -8,12 +8,12 @@ export interface TabGroup {
 }
 
 export interface KeyMeasure {
-    id: number;
+    id: string;
     name: string;
 }
 
 export interface Objective {
-    id: number;
+    id: string;
     name: string;
     keyMeasures: KeyMeasure[];
     startDate: Date;
