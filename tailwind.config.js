@@ -5,7 +5,8 @@ module.exports = {
     extend: {
       colors: {
         avertroBlue: '#25397D',
-        grey: "#D7D7D7"  
+        grey: "#D7D7D7",
+        danger: '#E03345'
       },
       // add Inter and Nunito to the font family
       fontFamily: {
