@@ -21,22 +21,20 @@ const tabs: Tab[] = [
 	},
 ]
 
-export default () => {	
-	return (
-		<>
-			<Navigation />
-			
-			<main className="bg-neutral-100 min-h-[calc(100vh-72px)]">	
-			
-				<article className='mx-[38px] flex flex-col gap-6 py-6 xl:max-w-screen-xl xl:mx-auto'>
+const App = () => <>
+	<Navigation />
 
-					<Header content='Set Security Strategy'/>
-					<Divider />
-					<Tabs tabGroup={{tabs}}/>
+	<main className="bg-neutral-100 min-h-[calc(100vh-72px)] flex justify-center">	
 
-				</article>
-			
-			</main>
-		</>
-  	);
-}
+		<article className='mx-[38px] flex flex-col gap-6 py-6 max-w-screen-xl w-full'>
+
+			<Header content='Set Security Strategy'/>
+			<Divider />
+			<Tabs tabGroup={{tabs}}/>
+
+		</article>
+
+	</main>
+</>
+
+export default App;
