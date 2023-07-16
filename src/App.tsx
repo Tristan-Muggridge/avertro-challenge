@@ -10,7 +10,7 @@ import Objectives from './components/Objectives';
 const tabs: Tab[] = [
 	{
 		heading: "Mission & Vision",
-		content: <div className='text-center font-bold'> To be implemented! </div>
+		content: <div className='text-center font-bold'> Out of scope! </div>
 	},
 	{
 		heading: "Strategic Business Objectives",
