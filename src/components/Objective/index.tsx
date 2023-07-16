@@ -1,51 +1,13 @@
 import { Objective as IObjective } from '@/types';
-import { ChangeEvent, FormEvent, createRef, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import {BiPlus} from 'react-icons/bi';
 import Button from '../Button';
-import { AiFillCalendar } from 'react-icons/ai'
 import MinusIcon from '../../UI/MinusIcon';
 import generateUUID from "../../util/GenerateUUID";
 import Modal from '../Modal';
 
-interface InputProps {
-    label?:string; 
-    value: string; 
-    name: string;
-    onChange(e: ChangeEvent<HTMLInputElement>):void; 
-    children?:React.ReactNode;
-    require?:boolean;
-}
-const TextInput = ({label, value, onChange, name, children, require}:InputProps) => {
-    return (
-        <div className='flex flex-col'>
-            <div className='flex justify-between flex-wrap'>
-                {label && <label htmlFor="name" className='text-avertroBlue font-inter font-bold text-xl'>{label}</label>}
-                {children}
-            </div>
-            <input type="text" {...{value, onChange, name, require}} className='outline outline-2 outline-grey rounded-md p-4 mt-2' />
-        </div>
-    )
-}
-
-interface DateInputProps {
-    min: string;
-}
-const DateInput = ({label, value, onChange, name, min, require}: InputProps & DateInputProps) => {
-    
-    const dateRef = createRef<HTMLInputElement>();
-
-    return (
-        <div className='flex flex-col  flex-1'>
-            <label htmlFor="name" className='text-avertroBlue font-inter font-bold text-xl'>{label}</label>
-            <div onClick={() => dateRef.current?.focus()} 
-                 {...{value, onChange, name, min}} 
-                 className='outline outline-2 outline-grey rounded-md py-4 px-2 mt-2 flex gap-2 items-center justify-center' >
-                    <AiFillCalendar className='text-avertroBlue text-2xl'/>
-                    <input ref={dateRef} type="date" {...{value, onChange, name, min, require}} className='outline outline-transparent'/>
-            </div>
-        </div>
-    )
-}
+import TextInputField from '../Form/TextInputField';
+import DateInputField from '../Form/DateInputField';
 
 interface Props {
     objective: IObjective;
@@ -56,20 +18,22 @@ interface Props {
 const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     const [form, setForm] = useState<IObjective>(objective);
     const [showModal, setShowModal] = useState(false);
-    
+    const [formValid, setFormValid] = useState(false);
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        
-        // validation of form
-
-        form.name = form.name.trim();
-        form.keyMeasures = form.keyMeasures.filter(km => km.name.trim() !== '');
-
-
-    
-        onUpdate(form);
+        validate(form) ? onUpdate(form) : alert('Invalid form');
     }
     
+    const validate = (form: IObjective) => {
+        let isValid = true;
+
+        if (form.name.trim() === '') isValid = false;
+        if (form.keyMeasures[0].name.trim() === '') isValid = false;
+        if (form.startDate > form.endDate) isValid = false;
+
+        return isValid;
+    }
+
     const handleChange = <T extends keyof typeof form>(key: T, value: typeof form[T]) => {
         setForm( form => { return {...form, [key]: value} } )
     }
@@ -79,6 +43,11 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
         setShowModal(false);
         onDelete(form);
     }
+
+    useEffect(() => {
+        const validation = validate(form)
+        setFormValid(validation);
+    }, [form])
 
     return (
     <>
@@ -98,17 +67,23 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
         <div className='outline-2 outline-grey outline p-4 rounded-[10px]'>
             <form onSubmit={handleSubmit} className=' grid grid-cols-1 md:grid-cols-2 gap-10 place-content-between'>
                 
-                <TextInput label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={(e) => handleChange('name', e.target.value)} />
+                <TextInputField label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={(e) => handleChange('name', e.target.value)} />
 
                 <div className='flex gap-6 lg:flex-nowrap flex-wrap'>
-                    <DateInput 
+                    <DateInputField 
                         label='Start Date' 
                         value={form.startDate.toISOString().split('T')[0]} 
                         name='StartDate' 
                         onChange={(e) => { handleChange('startDate', new Date(e.target.value)) }} 
-                        min={new Date().toISOString().split('T')[0]} />
+                        min={new Date().toISOString().split('T')[0]} 
+                        rules={[
+                            {
+                                message: "Start date must be before end date", validate: (value) => new Date(value) < form.endDate
+                            }
+                        ]}
+                        />
 
-                    <DateInput 
+                    <DateInputField 
                         label='End Date' 
                         value={form.endDate.toISOString().split('T')[0]} 
                         name='EndDate' 
@@ -117,7 +92,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 </div>
 
                 <div className='flex flex-col'>
-                    <TextInput 
+                    <TextInputField 
                         label='Key Measures' 
                         value={form.keyMeasures[0].name} 
                         name='KeyMeasures1'
@@ -135,14 +110,13 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                             
                             </button>
                         }
-                    </TextInput>
+                    </TextInputField>
                 
                 {
                     form.keyMeasures.slice(1).map( ({id, name}, index) => 
-                        <div className='flex items-center gap-4 grow relative'>
+                        <div className='flex items-center gap-4 grow relative' key={id}>
                             <div className='grow'>
-                                <TextInput
-                                    key={id}
+                                <TextInputField
                                     value={name} 
                                     name={`KeyMeasures${index+1}`} 
                                     onChange={ e => {
@@ -170,7 +144,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                         </Button>
                     </div>
                     <div className='flex-1 md:grow-0'>
-                        <Button type="submit" grow={true}>
+                        <Button type="submit" grow={true} disabled={!formValid}>
                             Update
                         </Button>
                     </div>

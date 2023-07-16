@@ -30,6 +30,7 @@ const Objectives = () => {
     
     const onUpdate = (objective: IObjective) => {
         objective.updatedDate = new Date();
+        objective.keyMeasures = objective.keyMeasures.filter(km => km.name.trim() !== '');
         setObjectives(objectives.map(o => o.id === objective.id ? objective : o));
     }
 
