@@ -7,21 +7,22 @@ import MinusIcon from '../../UI/MinusIcon';
 import generateUUID from "../../util/GenerateUUID";
 import Modal from '../Modal';
 
-interface TextInputProps {
+interface InputProps {
     label?:string; 
     value: string; 
     name: string;
     onChange(e: ChangeEvent<HTMLInputElement>):void; 
     children?:React.ReactNode;
+    require?:boolean;
 }
-const TextInput = ({label, value, onChange, name, children}:TextInputProps) => {
+const TextInput = ({label, value, onChange, name, children, require}:InputProps) => {
     return (
         <div className='flex flex-col'>
             <div className='flex justify-between flex-wrap'>
                 {label && <label htmlFor="name" className='text-avertroBlue font-inter font-bold text-xl'>{label}</label>}
                 {children}
             </div>
-            <input type="text" {...{value, onChange, name}} className='outline outline-2 outline-grey rounded-md p-4 mt-2'/>
+            <input type="text" {...{value, onChange, name, require}} className='outline outline-2 outline-grey rounded-md p-4 mt-2' />
         </div>
     )
 }
@@ -29,18 +30,18 @@ const TextInput = ({label, value, onChange, name, children}:TextInputProps) => {
 interface DateInputProps {
     min: string;
 }
-const DateInput = ({label, value, onChange, name, min}: TextInputProps & DateInputProps) => {
+const DateInput = ({label, value, onChange, name, min, require}: InputProps & DateInputProps) => {
     
     const dateRef = createRef<HTMLInputElement>();
 
     return (
-        <div className='flex flex-col grow'>
+        <div className='flex flex-col  flex-1'>
             <label htmlFor="name" className='text-avertroBlue font-inter font-bold text-xl'>{label}</label>
             <div onClick={() => dateRef.current?.focus()} 
                  {...{value, onChange, name, min}} 
-                 className='relative outline outline-2 outline-grey rounded-md p-4 mt-2 flex gap-2 items-center' >
+                 className='outline outline-2 outline-grey rounded-md py-4 px-2 mt-2 flex gap-2 items-center justify-center' >
                     <AiFillCalendar className='text-avertroBlue text-2xl'/>
-                    <input ref={dateRef} type="date" {...{value, onChange, name, min}} className='outline outline-transparent'/>
+                    <input ref={dateRef} type="date" {...{value, onChange, name, min, require}} className='outline outline-transparent'/>
             </div>
         </div>
     )
@@ -54,17 +55,25 @@ interface Props {
 }
 const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     const [form, setForm] = useState<IObjective>(objective);
-    const [showModal, setShowModal] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+    
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        
+        // validation of form
+
+        form.name = form.name.trim();
+        form.keyMeasures = form.keyMeasures.filter(km => km.name.trim() !== '');
+
+
+    
+        onUpdate(form);
     }
+    
     const handleChange = <T extends keyof typeof form>(key: T, value: typeof form[T]) => {
         setForm( form => { return {...form, [key]: value} } )
     }
-    const handleUpdate = () => {
-        //perform validation
-        onUpdate(form);
-    }
+    
     const handleDelete = () => {
         // show confirmation modal
         setShowModal(false);
@@ -91,7 +100,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 
                 <TextInput label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={(e) => handleChange('name', e.target.value)} />
 
-                <div className='flex gap-6 md:flex-nowrap flex-wrap'>
+                <div className='flex gap-6 lg:flex-nowrap flex-wrap'>
                     <DateInput 
                         label='Start Date' 
                         value={form.startDate.toISOString().split('T')[0]} 
@@ -108,24 +117,25 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 </div>
 
                 <div className='flex flex-col'>
-                <TextInput 
-                    label='Key Measures' 
-                    value={form.keyMeasures[0].name} 
-                    name='KeyMeasures1' 
-                    onChange={(e) => handleChange('keyMeasures', [{ id: form.keyMeasures[0].id, name: e.target.value}, ...form.keyMeasures.slice(1)])} >
-                    {
-                        form.keyMeasures.length < 3 &&
-                        <button
-                            type='button'
-                            onClick={() => handleChange('keyMeasures', [...form.keyMeasures, {id: generateUUID(), name: ''}])}
-                            className='text-avertroBlue flex gap-2 items-center font-medium font-inter text-sm flex-wrap justify-center' >
+                    <TextInput 
+                        label='Key Measures' 
+                        value={form.keyMeasures[0].name} 
+                        name='KeyMeasures1'
+                        require={true}
+                        onChange={(e) => handleChange('keyMeasures', [{ id: form.keyMeasures[0].id, name: e.target.value}, ...form.keyMeasures.slice(1)])} >
+                        {
+                            form.keyMeasures.length < 3 &&
+                            <button
+                                type='button'
+                                onClick={() => handleChange('keyMeasures', [...form.keyMeasures, {id: generateUUID(), name: ''}])}
+                                className='text-avertroBlue flex gap-2 items-center font-medium font-inter text-sm flex-wrap justify-center' >
+                                
+                                Add additional key measure
+                                <BiPlus className='bg-avertroBlue text-white rounded-full w-5 h-5'/>
                             
-                            Add additional key measure
-                            <BiPlus className='bg-avertroBlue text-white rounded-full w-5 h-5'/>
-                        
-                        </button>
-                    }
-                </TextInput>
+                            </button>
+                        }
+                    </TextInput>
                 
                 {
                     form.keyMeasures.slice(1).map( ({id, name}, index) => 
@@ -153,16 +163,18 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 }
                 </div>
 
-                <div className='flex justify-end gap-2 md:gap-8 md:col-span-2 flex-wrap md:fle'>
-                    <Button variant='danger' onClick={() => setShowModal(true)}>
-                        Delete
-                    </Button>
-
-                    <Button onClick={handleUpdate}>
-                        Update
-                    </Button>
+                <div className='flex justify-end gap-2 md:gap-8 md:col-span-2 flex-col md:flex-row flex-wrap md:flex'>
+                    <div className='flex-1 md:grow-0'>
+                        <Button variant='danger' onClick={() => setShowModal(true)} grow={true}>
+                            Delete
+                        </Button>
+                    </div>
+                    <div className='flex-1 md:grow-0'>
+                        <Button type="submit" grow={true}>
+                            Update
+                        </Button>
+                    </div>
                 </div>
-
             </form>
         </div>
     </>

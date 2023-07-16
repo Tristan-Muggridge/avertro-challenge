@@ -38,14 +38,15 @@ const Objectives = () => {
     }
 
     return ( 
-        <div className="flex flex-col gap-8 px-2">
-            {
-                objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index, onUpdate, onDelete}} />)
-            }
-
+        <div className="flex flex-col gap-8 px-2 items-center">
+            <div className="w-full">
+                {
+                    objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index, onUpdate, onDelete}} />)
+                }
+            </div>
             {
                 objectives.length < 3 &&
-                <div className="self-end">
+                <div className="md:self-end">
                     <Button onClick={createObjective}>
                         <PlusIcon className="text-avertroBlue bg-white" />
                         Add Objective
