@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tab, TabGroup } from "@/types";
+import { TabGroup } from "@/types";
 
 interface Props {
     tabGroup: TabGroup;
@@ -26,7 +26,7 @@ const Tabs = ( {tabGroup}:Props ) => {
                     tabGroup.tabs.map(({heading}, idx) => <TabHeader title={heading} active={idx === active} onClick={() => setActive(idx)}/>)
                 }
             </div>
-            <div className="flex flex-col w-full p-2 bg-white">
+            <div className="flex flex-col w-full p-4 bg-white rounded-lg rounded-tl-none">
                 { tabGroup.tabs[active].content }
             </div>
         </div>
