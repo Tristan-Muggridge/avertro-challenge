@@ -6,13 +6,23 @@ const ls = LocalStorage.getInstance();
 
 const useObjectives = () => {
 
-    const [objectives, setObjectives] = useState<Objective[]>([]);
+    const [objectives, setObjectives] = useState<Objective[] | null >(null);
 
     useEffect(() => {
-        const objectives = ls.get<Objective>("objectives");
+        let objectives = ls.get<Objective[]>("objectives");
+        if (!objectives) objectives = [];
+
+        objectives.forEach((objective) => { 
+            objective.startDate = new Date(objective.startDate);
+            objective.endDate = new Date(objective.endDate);
+            objective.updatedDate = new Date(objective.updatedDate);
+        });
+        
+        setObjectives(objectives);
     }, [])
 
     useEffect( () => {
+        if (!objectives) return;
         ls.set("objectives", objectives);
     }, [objectives])
 

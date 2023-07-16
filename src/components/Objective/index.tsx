@@ -6,12 +6,14 @@ import { AiFillCalendar } from 'react-icons/ai'
 import MinusIcon from '../../UI/MinusIcon';
 import generateUUID from "../../util/GenerateUUID";
 
-interface Props {
-    objective: IObjective;
-    index: number;
+interface TextInputProps {
+    label?:string; 
+    value: string; 
+    name: string;
+    onChange(e: ChangeEvent<HTMLInputElement>):void; 
+    children?:React.ReactNode;
 }
-
-const TextInput = ({label, value, onChange, name, children}:{label?:string, value: string, name: string, onChange(e: ChangeEvent<HTMLInputElement>):void, children?:React.ReactNode}) => {
+const TextInput = ({label, value, onChange, name, children}:TextInputProps) => {
     return (
         <div className='flex flex-col'>
             <div className='flex justify-between flex-wrap'>
@@ -23,7 +25,10 @@ const TextInput = ({label, value, onChange, name, children}:{label?:string, valu
     )
 }
 
-const DateInput = ({label, value, onChange, name, min}:{label: string, value: string, name: string, onChange(e: ChangeEvent<HTMLInputElement>):void, min:string, max:string}) => {
+interface DateInputProps {
+    min: string;
+}
+const DateInput = ({label, value, onChange, name, min}: TextInputProps & DateInputProps) => {
     
     const dateRef = createRef<HTMLInputElement>();
 
@@ -40,7 +45,13 @@ const DateInput = ({label, value, onChange, name, min}:{label: string, value: st
     )
 }
 
-const Objective = ({objective, index}:Props) => {
+interface Props {
+    objective: IObjective;
+    index: number;
+    onUpdate(objective: IObjective):void;
+    onDelete(objective: IObjective):void;
+}
+const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     const [form, setForm] = useState<IObjective>(objective);
 
     const handleSubmit = (e: FormEvent) => {
@@ -48,6 +59,15 @@ const Objective = ({objective, index}:Props) => {
     }
     const handleChange = <T extends keyof typeof form>(key: T, value: typeof form[T]) => {
         setForm( form => { return {...form, [key]: value} } )
+    }
+    const handleUpdate = () => {
+        //perform validation
+        onUpdate(form);
+    }
+    const handleDelete = () => {
+        // show confirmation modal
+
+        onDelete(form);
     }
 
     useEffect( () => {
@@ -66,16 +86,14 @@ const Objective = ({objective, index}:Props) => {
                         value={form.startDate.toISOString().split('T')[0]} 
                         name='StartDate' 
                         onChange={(e) => { handleChange('startDate', new Date(e.target.value)) }} 
-                        min={new Date().toISOString().split('T')[0]} 
-                        max='' />
+                        min={new Date().toISOString().split('T')[0]} />
 
                     <DateInput 
                         label='End Date' 
                         value={form.endDate.toISOString().split('T')[0]} 
                         name='EndDate' 
                         onChange={(e) => { handleChange('endDate', new Date(e.target.value)) }} 
-                        min={form.startDate.toISOString().split('T')[0]} 
-                        max='' />
+                        min={form.startDate.toISOString().split('T')[0]} />
                 </div>
 
                 <div className='flex flex-col'>
@@ -125,11 +143,11 @@ const Objective = ({objective, index}:Props) => {
                 </div>
 
                 <div className='flex justify-end gap-2 md:gap-8 md:col-span-2 flex-wrap md:fle'>
-                    <Button variant='danger'>
+                    <Button variant='danger' onClick={handleDelete}>
                         Delete
                     </Button>
 
-                    <Button>
+                    <Button onClick={handleUpdate}>
                         Update
                     </Button>
                 </div>

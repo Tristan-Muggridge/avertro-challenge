@@ -1,3 +1,4 @@
+import { Objective as IObjective } from "@/types";
 import generateUUID from "../..//util/GenerateUUID";
 import PlusIcon from "../../UI/PlusIcon";
 import useObjectives from "../../hooks/useObjectives";
@@ -5,12 +6,11 @@ import Button from "../Button";
 import Objective from "../Objective";
 
 const mock = {
-    id: generateUUID(),
-    name: 'Reduce Risk',
+    name: '',
     keyMeasures: [
         {
             id: generateUUID(),
-            name: 'First Key Measure',
+            name: '',
         }
     ],
     startDate: new Date(),
@@ -21,15 +21,26 @@ const mock = {
 
 const Objectives = () => {
     const { objectives, setObjectives } = useObjectives();
-    
+
+    if (!objectives) return <div>Loading...</div>
+
     const createObjective = () => {
-        setObjectives([...objectives, mock])
+        setObjectives([...objectives, {...mock, id: generateUUID()}])
     }
     
-    return (
+    const onUpdate = (objective: IObjective) => {
+        objective.updatedDate = new Date();
+        setObjectives(objectives.map(o => o.id === objective.id ? objective : o));
+    }
+
+    const onDelete = (objective: IObjective) => {
+        setObjectives(objectives.filter(o => o.id !== objective.id));
+    }
+
+    return ( 
         <div className="flex flex-col gap-8 px-2">
             {
-                objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index}} />)
+                objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index, onUpdate, onDelete}} />)
             }
 
             {
