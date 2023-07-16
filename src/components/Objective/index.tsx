@@ -1,10 +1,11 @@
 import { Objective as IObjective } from '@/types';
-import { ChangeEvent, FormEvent, createRef, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, createRef, useState } from 'react';
 import {BiPlus} from 'react-icons/bi';
 import Button from '../Button';
 import { AiFillCalendar } from 'react-icons/ai'
 import MinusIcon from '../../UI/MinusIcon';
 import generateUUID from "../../util/GenerateUUID";
+import Modal from '../Modal';
 
 interface TextInputProps {
     label?:string; 
@@ -53,7 +54,7 @@ interface Props {
 }
 const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     const [form, setForm] = useState<IObjective>(objective);
-
+    const [showModal, setShowModal] = useState(true);
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
     }
@@ -66,15 +67,25 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     }
     const handleDelete = () => {
         // show confirmation modal
-
+        setShowModal(false);
         onDelete(form);
     }
 
-    useEffect( () => {
-        console.debug(form)
-    }, [form])
-
     return (
+    <>
+        {/* Deletion Confirmation Modal */}
+        { showModal && 
+            <Modal {...{setShowModal}}>
+                <div className='flex flex-col gap-8'>
+                    <h2> Are you sure you want to delete this objective? </h2>
+                    <div className='flex justify-around gap-8'>
+                        <Button onClick={handleDelete} variant='danger'> Delete </Button>
+                        <Button onClick={() => setShowModal(false)}>Close</Button>
+                    </div>
+                </div>
+            </Modal>
+        }
+
         <div className='outline-2 outline-grey outline p-4 rounded-[10px]'>
             <form onSubmit={handleSubmit} className=' grid grid-cols-1 md:grid-cols-2 gap-10 place-content-between'>
                 
@@ -143,7 +154,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 </div>
 
                 <div className='flex justify-end gap-2 md:gap-8 md:col-span-2 flex-wrap md:fle'>
-                    <Button variant='danger' onClick={handleDelete}>
+                    <Button variant='danger' onClick={() => setShowModal(true)}>
                         Delete
                     </Button>
 
@@ -154,6 +165,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
 
             </form>
         </div>
+    </>
     )
 }
 
