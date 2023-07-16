@@ -74,7 +74,11 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                         label='Start Date' 
                         value={form.startDate.toISOString().split('T')[0]} 
                         name='StartDate' 
-                        onChange={({target: {value: startDate}}) => { handleChange('startDate', new Date(startDate)) }} 
+                        onChange={({target: {value: startDate}}) => { 
+                            const newStartDate = new Date(startDate);
+                            handleChange('startDate', newStartDate);
+                            if (newStartDate > form.endDate) handleChange('endDate', new Date(newStartDate.getFullYear(), newStartDate.getMonth(), newStartDate.getDate()+7));
+                        }}
                         min={new Date().toISOString().split('T')[0]} 
                         rules={[
                             {
