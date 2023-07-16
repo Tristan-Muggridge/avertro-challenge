@@ -5,18 +5,22 @@ import useObjectives from "../../hooks/useObjectives";
 import Button from "../Button";
 import Objective from "../Objective";
 
-const mock = {
-    name: '',
-    keyMeasures: [
-        {
-            id: generateUUID(),
-            name: '',
-        }
-    ],
-    startDate: new Date(),
-    endDate: new Date(),
-    createdDate: new Date(),
-    updatedDate: new Date(),
+const mockObjective = () => {
+    return {
+        id: generateUUID(),
+        name: '',
+        startDate: new Date(),
+        endDate: new Date(),
+        createdDate: new Date(),
+        updatedDate: new Date(),
+
+        keyMeasures: [
+            {
+                id: generateUUID(),
+                name: '',
+            }
+        ]
+    }
 }
 
 const Objectives = () => {
@@ -25,7 +29,7 @@ const Objectives = () => {
     if (!objectives) return <div>Loading...</div>
 
     const createObjective = () => {
-        setObjectives([...objectives, {...mock, id: generateUUID()}])
+        setObjectives([...objectives, mockObjective()]);
     }
     
     const onUpdate = (objective: IObjective) => {
@@ -40,7 +44,7 @@ const Objectives = () => {
 
     return ( 
         <div className="flex flex-col gap-8 px-2 items-center">
-            <div className="w-full">
+            <div className="w-full gap-6 flex flex-col">
                 {
                     objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index, onUpdate, onDelete}} />)
                 }

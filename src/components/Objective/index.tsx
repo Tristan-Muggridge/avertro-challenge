@@ -67,14 +67,14 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
         <div className='outline-2 outline-grey outline p-4 rounded-[10px]'>
             <form onSubmit={handleSubmit} className=' grid grid-cols-1 md:grid-cols-2 gap-10 place-content-between'>
                 
-                <TextInputField label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={(e) => handleChange('name', e.target.value)} />
+                <TextInputField label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={({target: {value: name}}) => handleChange('name', name)} />
 
                 <div className='flex gap-6 lg:flex-nowrap flex-wrap'>
                     <DateInputField 
                         label='Start Date' 
                         value={form.startDate.toISOString().split('T')[0]} 
                         name='StartDate' 
-                        onChange={(e) => { handleChange('startDate', new Date(e.target.value)) }} 
+                        onChange={({target: {value: startDate}}) => { handleChange('startDate', new Date(startDate)) }} 
                         min={new Date().toISOString().split('T')[0]} 
                         rules={[
                             {
@@ -87,7 +87,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                         label='End Date' 
                         value={form.endDate.toISOString().split('T')[0]} 
                         name='EndDate' 
-                        onChange={(e) => { handleChange('endDate', new Date(e.target.value)) }} 
+                        onChange={({target: {value: endDate}}) => { handleChange('endDate', new Date(endDate)) }} 
                         min={form.startDate.toISOString().split('T')[0]} />
                 </div>
 
@@ -97,7 +97,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                         value={form.keyMeasures[0].name} 
                         name='KeyMeasures1'
                         require={true}
-                        onChange={(e) => handleChange('keyMeasures', [{ id: form.keyMeasures[0].id, name: e.target.value}, ...form.keyMeasures.slice(1)])} >
+                        onChange={({target: {value: name}}) => handleChange('keyMeasures', [{ id: form.keyMeasures[0].id, name}, ...form.keyMeasures.slice(1)])} >
                         {
                             form.keyMeasures.length < 3 &&
                             <button
@@ -119,16 +119,16 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                                 <TextInputField
                                     value={name} 
                                     name={`KeyMeasures${index+1}`} 
-                                    onChange={ e => {
+                                    onChange={ ({target: {value: name}}) => {
                                         const updatedMeasures = [...form.keyMeasures];
-                                        updatedMeasures[index+1] = {id, name: e.target.value};
+                                        updatedMeasures[index+1] = {id, name};
                                         handleChange('keyMeasures', updatedMeasures);
                                     }} />
                             </div>
 
                             <button 
                                 type='button' 
-                                className='bg-danger text-white rounded-full w-5 h-5 absolute -right-7' 
+                                className='bg-danger text-white rounded-full w-5 h-5 md:absolute -right-7' 
                                 onClick={() => handleChange('keyMeasures', [...form.keyMeasures.filter(km => km.id !== id)])}> 
                                 <MinusIcon /> 
                             </button>

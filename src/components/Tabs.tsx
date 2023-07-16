@@ -25,7 +25,7 @@ const Tabs = ( {tabGroup}:Props ) => {
 
     return (
         <div className="w-full">
-            <div className="flex w-full flex-col">
+            <div className="flex w-full flex-col md:flex-row">
                 {
                     tabGroup.tabs.map(({heading}, idx) => <TabHeader key={`${idx}-${heading}`} title={heading} active={idx === active} onClick={() => setActive(idx)}/>)
                 }
