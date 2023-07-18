@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "//avertro-challenge.muggridge.dev/static/css/main.774e5d72.css",
-    "main.js": "//avertro-challenge.muggridge.dev/static/js/main.bdb9c8a1.js",
-    "static/js/787.23e01670.chunk.js": "//avertro-challenge.muggridge.dev/static/js/787.23e01670.chunk.js",
-    "index.html": "//avertro-challenge.muggridge.dev/index.html",
-    "main.774e5d72.css.map": "//avertro-challenge.muggridge.dev/static/css/main.774e5d72.css.map",
-    "main.bdb9c8a1.js.map": "//avertro-challenge.muggridge.dev/static/js/main.bdb9c8a1.js.map",
-    "787.23e01670.chunk.js.map": "//avertro-challenge.muggridge.dev/static/js/787.23e01670.chunk.js.map"
+    "main.css": "/static/css/main.774e5d72.css",
+    "main.js": "/static/js/main.3f781caf.js",
+    "static/js/787.23e01670.chunk.js": "/static/js/787.23e01670.chunk.js",
+    "index.html": "/index.html",
+    "main.774e5d72.css.map": "/static/css/main.774e5d72.css.map",
+    "main.3f781caf.js.map": "/static/js/main.3f781caf.js.map",
+    "787.23e01670.chunk.js.map": "/static/js/787.23e01670.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.774e5d72.css",
-    "static/js/main.bdb9c8a1.js"
+    "static/js/main.3f781caf.js"
   ]
 }
