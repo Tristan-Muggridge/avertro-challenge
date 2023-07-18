@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Tristan-Muggridge/avertro-challenge/static/css/main.774e5d72.css",
+    "main.js": "/Tristan-Muggridge/avertro-challenge/static/js/main.265bb206.js",
+    "static/js/787.23e01670.chunk.js": "/Tristan-Muggridge/avertro-challenge/static/js/787.23e01670.chunk.js",
+    "index.html": "/Tristan-Muggridge/avertro-challenge/index.html",
+    "main.774e5d72.css.map": "/Tristan-Muggridge/avertro-challenge/static/css/main.774e5d72.css.map",
+    "main.265bb206.js.map": "/Tristan-Muggridge/avertro-challenge/static/js/main.265bb206.js.map",
+    "787.23e01670.chunk.js.map": "/Tristan-Muggridge/avertro-challenge/static/js/787.23e01670.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.774e5d72.css",
+    "static/js/main.265bb206.js"
+  ]
+}
