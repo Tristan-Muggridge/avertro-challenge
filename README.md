@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+[Please view the finished challenge here](https://tristan-muggridge.github.io/avertro-challenge/)
+
 ## Available Scripts
 
 In the project directory, you can run:
