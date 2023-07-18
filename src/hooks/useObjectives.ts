@@ -23,7 +23,7 @@ const useObjectives = () => {
 
     useEffect( () => {
         if (!objectives) return;
-        ls.set("objectives", objectives);
+        ls.set("objectives", objectives.filter(({name, keyMeasures}) => name && keyMeasures[0].name));
     }, [objectives])
 
     return {objectives, setObjectives}
