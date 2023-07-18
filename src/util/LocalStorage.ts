@@ -24,6 +24,7 @@ class LocalStorage implements ILocalStorage {
 
     private static instance: LocalStorage;
     private constructor() {}
+    
     public static getInstance(): LocalStorage {
         if (!LocalStorage.instance) {
             LocalStorage.instance = new LocalStorage();

@@ -6,7 +6,7 @@ export interface InputFieldProps {
     name: string;
     onChange(e: ChangeEvent<HTMLInputElement>):void; 
     children?:React.ReactNode;
-    require?:boolean;
+    require?:string;
     rules?:{message: string, validate: (value:string) => boolean, passed?:boolean}[];
 }
 

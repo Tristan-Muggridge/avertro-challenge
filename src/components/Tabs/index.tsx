@@ -1,26 +1,33 @@
 import { useState } from "react";
-
 import TabHeader from "./TabHeader";
-
 import { TabGroup } from "@/types";
 
 interface Props {
     tabGroup: TabGroup;
 }
 
-const Tabs = ( {tabGroup}:Props ) => {
+const Tabs = ({ tabGroup:{ tabs } }:Props) => {
 
     const [active, setActive] = useState(1);
 
     return (
         <div className="w-full">
-            <div className="flex w-full flex-col md:flex-row">
+            <ul className="flex w-full flex-col md:flex-row">
                 {
-                    tabGroup.tabs.map(({heading}, idx) => <TabHeader key={`${idx}-${heading}`} title={heading} active={idx === active} idx={idx} onClick={() => setActive(idx)}/>)
+                    tabs.map( ({heading}, idx) => 
+                        <li id={`tab-${idx}`}>
+                            <TabHeader 
+                                key={`${idx}-${heading}`} 
+                                title={heading} 
+                                active={idx === active} 
+                                idx={idx} 
+                                onClick={() => setActive(idx)} /> 
+                        </li>
+                    )
                 }
-            </div>
+            </ul>
             <div className="flex flex-col w-full p-4 bg-white md:rounded-lg sm:rounded-t-none rounded-tl-none">
-                { tabGroup.tabs[active].content }
+                { tabs[active].content }
             </div>
         </div>
     )

@@ -1,17 +1,14 @@
 import { FormEvent, useEffect, useState } from 'react';
-import {BiPlus} from 'react-icons/bi';
-
-import generateUUID from "../../util/GenerateUUID";
-
 import { Objective as IObjective } from '@/types';
 
 import Modal from '../Modal';
 
 import TextInputField from '../Form/TextInputField';
-import DateInputField from '../Form/DateInputField';
-
 import Button from '../../UI/Button';
-import MinusIcon from '../../UI/MinusIcon';
+
+import DateSelections from './DateSelections';
+import KeyMeasures from './KeyMeasures';
+import ActionButtons from './ActionButtons';
 
 interface Props {
     objective: IObjective;
@@ -21,16 +18,20 @@ interface Props {
 }
 
 const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
-    const [form, setForm] = useState<IObjective>(objective);
+
+    const [form, setForm] = useState<IObjective>({...objective});
     const [showModal, setShowModal] = useState(false);
     const [formValid, setFormValid] = useState(false);
+
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        validate(form) ? onUpdate(form) : alert('Invalid form');
+        
+        validate(form) 
+            ? onUpdate(form) 
+            : alert('Invalid form');
     }
     
     const validate = (form: IObjective) => {
-        // innocent till proven guilty
         let isValid = true;
 
         if (form.name.trim() === '') isValid = false;
@@ -49,6 +50,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
         onDelete(form);
     }
 
+    // Run validation of fields onchange of form
     useEffect(() => {
         const validation = validate(form)
         setFormValid(validation);
@@ -73,96 +75,18 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
             <form onSubmit={handleSubmit} className='grid grid-cols-1 md:grid-cols-2 gap-10 place-content-between'>
                 
                 {/* Objective */}
-                <TextInputField label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={({target: {value: name}}) => handleChange('name', name)} />
+                <TextInputField 
+                    label={`Objective ${++index}`} 
+                    value={form.name} 
+                    name='Objective1' 
+                    onChange={({target: {value: name}}) => handleChange('name', name)} />
 
-                {/* Start / End Date */}
-                <div className='flex gap-6 lg:flex-nowrap flex-wrap'>
-                    <DateInputField 
-                        label='Start Date' 
-                        value={form.startDate.toISOString().split('T')[0]} 
-                        name='StartDate' 
-                        onChange={({target: {value: startDate}}) => { 
-                            const newStartDate = new Date(startDate);
-                            handleChange('startDate', newStartDate);
-                            if (newStartDate > form.endDate) handleChange('endDate', new Date(newStartDate.getFullYear(), newStartDate.getMonth(), newStartDate.getDate()+7));
-                        }}
-                        min={new Date().toISOString().split('T')[0]} 
-                        rules={[
-                            {
-                                message: "Start date must be before end date", validate: (value) => new Date(value) < form.endDate
-                            }
-                        ]}
-                        />
+                <DateSelections {...{form, handleChange}}/>
 
-                    <DateInputField 
-                        label='End Date' 
-                        value={form.endDate.toISOString().split('T')[0]} 
-                        name='EndDate' 
-                        onChange={({target: {value: endDate}}) => { handleChange('endDate', new Date(endDate)) }} 
-                        min={form.startDate.toISOString().split('T')[0]} />
-                </div>
-
-                {/* First Key Measure */}
-                <div className='flex flex-col'>
-                    <TextInputField 
-                        label='Key Measures' 
-                        value={form.keyMeasures[0].name} 
-                        name='KeyMeasures1'
-                        require={true}
-                        onChange={({target: {value: name}}) => handleChange('keyMeasures', [{ id: form.keyMeasures[0].id, name}, ...form.keyMeasures.slice(1)])} >
-                        {
-                            form.keyMeasures.length < 3 &&
-                            <button
-                                type='button'
-                                onClick={() => handleChange('keyMeasures', [...form.keyMeasures, {id: generateUUID(), name: ''}])}
-                                className='text-avertroBlue flex gap-2 items-center font-medium font-inter text-sm flex-wrap justify-center' >
-                                
-                                Add additional key measure
-                                <BiPlus className='bg-avertroBlue text-white rounded-full w-5 h-5'/>
-                            </button>
-                        }
-                    </TextInputField>
-                
-                {/* Additional Key Measures */}
-                { 
-                    form.keyMeasures.slice(1).map( ({id, name}, index) => 
-                        <div className='flex items-center gap-4 md:relative' key={id}>
-                            <div className='grow'>
-                                <TextInputField
-                                    value={name} 
-                                    name={`KeyMeasures${index+1}`} 
-                                    onChange={ ({target: {value: name}}) => {
-                                        const updatedMeasures = [...form.keyMeasures];
-                                        updatedMeasures[index+1] = {id, name};
-                                        handleChange('keyMeasures', updatedMeasures);
-                                    }} />
-                            </div>
-
-                            <button 
-                                type='button' 
-                                className='bg-danger text-white rounded-full w-5 h-5 md:absolute -right-7' 
-                                onClick={() => handleChange('keyMeasures', [...form.keyMeasures.filter(km => km.id !== id)])}> 
-                                <MinusIcon /> 
-                            </button>
-                        </div>
-                    )
-                }
-                </div>
+                <KeyMeasures {...{form, handleChange}}/>
 
                 {/* Actions */}
-                <div className='flex justify-end gap-2 md:gap-8 md:col-span-2 flex-col md:flex-row flex-wrap md:flex'>
-                    <div className='flex-1 md:grow-0'>
-                        <Button variant='danger' onClick={() => setShowModal(true)} grow={true}>
-                            Delete
-                        </Button>
-                    </div>
-
-                    <div className='flex-1 md:grow-0'>
-                        <Button type="submit" grow={true} disabled={!formValid}>
-                            Update
-                        </Button>
-                    </div>
-                </div>
+                <ActionButtons {...{onClickDelete: () => setShowModal(true), formValid}}/>
             </form>
         </div>
     </>

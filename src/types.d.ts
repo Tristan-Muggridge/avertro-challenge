@@ -23,6 +23,11 @@ export interface Objective {
     updatedDate: Date;
 }
 
+export interface ObjectiveFieldProps {
+    form: Objective;
+    handleChange: (key: keyof Objective, value: Objective[keyof Objective]) => void;
+}
+
 export interface ILocalStorage {
     get<T>(key:string): T | null;
     set<T>(key:string, value: T): void;

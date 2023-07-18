@@ -1,4 +1,12 @@
-const TabHeader = ({title, active, onClick, idx}:{title: string, active: boolean, onClick():void, idx:number}) => {
+
+interface TabHeaderProps {
+    title: string;
+    active: boolean;
+    onClick():void;
+    idx:number;
+}
+
+const TabHeader = ({title, active, onClick, idx}:TabHeaderProps) => {
     return (
         <div 
             onClick={onClick} 

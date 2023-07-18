@@ -4,9 +4,10 @@ import { InputFieldProps } from "./InputField";
 
 interface DateInputProps {
     min: string;
+    max?: string;
 }
 
-const DateInputField = ({label, value, onChange, name, min, require, children}: InputFieldProps & DateInputProps) => {
+const DateInputField = ({label, value, onChange, name, min, max, require, children}: InputFieldProps & DateInputProps) => {
     
     const dateRef = createRef<HTMLInputElement>();
 
@@ -22,7 +23,7 @@ const DateInputField = ({label, value, onChange, name, min, require, children}: 
                  {...{value, onChange, name, min}} 
                  className='relative outline outline-2 outline-grey rounded-md py-4 px-2 mt-2 flex gap-2 items-center justify-center' >
                     <AiFillCalendar className='text-avertroBlue text-2xl'/>
-                    <input ref={dateRef} type="date" {...{value, onChange, name, min, require}} className='outline outline-transparent'/>
+                    <input ref={dateRef} type="date" {...{value, onChange, name, min, max, require}} className='outline outline-transparent'/>
             </div>
         </div>
     )

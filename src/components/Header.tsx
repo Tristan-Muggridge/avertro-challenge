@@ -3,6 +3,8 @@ interface Props {
 }
 
 const Header = ({content}:Props) => 
-    <h3 className="text-avertroBlue text-lg font-nunito"> {content} </h3>
+    <h3 className="text-avertroBlue text-lg font-nunito"> 
+        {content} 
+    </h3>
 
 export default Header;

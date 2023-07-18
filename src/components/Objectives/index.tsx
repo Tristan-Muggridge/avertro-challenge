@@ -1,11 +1,7 @@
 import generateUUID from "../..//util/GenerateUUID";
-
 import { Objective as IObjective } from "@/types";
-
 import useObjectives from "../../hooks/useObjectives";
-
 import Objective from "../Objective";
-
 import PlusIcon from "../../UI/PlusIcon";
 import Button from "../../UI/Button";
 
@@ -26,6 +22,8 @@ const mockObjective = () => {
         ]
     }
 }
+
+const maxObjectives = 3;
 
 const Objectives = () => {
     const { objectives, setObjectives } = useObjectives();
@@ -50,11 +48,13 @@ const Objectives = () => {
         <div className="flex flex-col gap-8 px-2 items-center">
             <div className="w-full gap-6 flex flex-col">
                 {
-                    objectives.map((objective, index) => <Objective {...{objective, key: objective.id, index, onUpdate, onDelete}} />)
+                    objectives.map((objective, index) => 
+                        <Objective {...{objective, key: objective.id, index, onUpdate, onDelete}} />
+                    )
                 }
             </div>
             {
-                objectives.length < 3 &&
+                objectives.length < maxObjectives &&
                 <div className="md:self-end">
                     <Button onClick={createObjective}>
                         <PlusIcon className="text-avertroBlue bg-white" />
