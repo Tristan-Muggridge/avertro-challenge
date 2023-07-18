@@ -1,13 +1,17 @@
-import { Objective as IObjective } from '@/types';
 import { FormEvent, useEffect, useState } from 'react';
 import {BiPlus} from 'react-icons/bi';
-import Button from '../Button';
-import MinusIcon from '../../UI/MinusIcon';
+
 import generateUUID from "../../util/GenerateUUID";
+
+import { Objective as IObjective } from '@/types';
+
 import Modal from '../Modal';
 
 import TextInputField from '../Form/TextInputField';
 import DateInputField from '../Form/DateInputField';
+
+import Button from '../../UI/Button';
+import MinusIcon from '../../UI/MinusIcon';
 
 interface Props {
     objective: IObjective;
@@ -15,6 +19,7 @@ interface Props {
     onUpdate(objective: IObjective):void;
     onDelete(objective: IObjective):void;
 }
+
 const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     const [form, setForm] = useState<IObjective>(objective);
     const [showModal, setShowModal] = useState(false);
@@ -25,6 +30,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     }
     
     const validate = (form: IObjective) => {
+        // innocent till proven guilty
         let isValid = true;
 
         if (form.name.trim() === '') isValid = false;
@@ -39,7 +45,6 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     }
     
     const handleDelete = () => {
-        // show confirmation modal
         setShowModal(false);
         onDelete(form);
     }
@@ -65,10 +70,12 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
         }
 
         <div className='outline-2 outline-grey outline p-4 rounded-[10px]'>
-            <form onSubmit={handleSubmit} className=' grid grid-cols-1 md:grid-cols-2 gap-10 place-content-between'>
+            <form onSubmit={handleSubmit} className='grid grid-cols-1 md:grid-cols-2 gap-10 place-content-between'>
                 
+                {/* Objective */}
                 <TextInputField label={`Objective ${++index}`} value={form.name} name='Objective1' onChange={({target: {value: name}}) => handleChange('name', name)} />
 
+                {/* Start / End Date */}
                 <div className='flex gap-6 lg:flex-nowrap flex-wrap'>
                     <DateInputField 
                         label='Start Date' 
@@ -95,6 +102,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                         min={form.startDate.toISOString().split('T')[0]} />
                 </div>
 
+                {/* First Key Measure */}
                 <div className='flex flex-col'>
                     <TextInputField 
                         label='Key Measures' 
@@ -111,14 +119,14 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                                 
                                 Add additional key measure
                                 <BiPlus className='bg-avertroBlue text-white rounded-full w-5 h-5'/>
-                            
                             </button>
                         }
                     </TextInputField>
                 
-                {
+                {/* Additional Key Measures */}
+                { 
                     form.keyMeasures.slice(1).map( ({id, name}, index) => 
-                        <div className='flex items-center gap-4 grow relative' key={id}>
+                        <div className='flex items-center gap-4 md:relative' key={id}>
                             <div className='grow'>
                                 <TextInputField
                                     value={name} 
@@ -141,12 +149,14 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 }
                 </div>
 
+                {/* Actions */}
                 <div className='flex justify-end gap-2 md:gap-8 md:col-span-2 flex-col md:flex-row flex-wrap md:flex'>
                     <div className='flex-1 md:grow-0'>
                         <Button variant='danger' onClick={() => setShowModal(true)} grow={true}>
                             Delete
                         </Button>
                     </div>
+
                     <div className='flex-1 md:grow-0'>
                         <Button type="submit" grow={true} disabled={!formValid}>
                             Update

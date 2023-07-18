@@ -1,9 +1,13 @@
-import { Objective as IObjective } from "@/types";
 import generateUUID from "../..//util/GenerateUUID";
-import PlusIcon from "../../UI/PlusIcon";
+
+import { Objective as IObjective } from "@/types";
+
 import useObjectives from "../../hooks/useObjectives";
-import Button from "../Button";
+
 import Objective from "../Objective";
+
+import PlusIcon from "../../UI/PlusIcon";
+import Button from "../../UI/Button";
 
 const mockObjective = () => {
     return {
