@@ -79,6 +79,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                     label={`Objective ${++index}`} 
                     value={form.name} 
                     name='Objective1' 
+                    required={true}
                     onChange={({target: {value: name}}) => handleChange('name', name)} />
 
                 <DateSelections {...{form, handleChange}}/>

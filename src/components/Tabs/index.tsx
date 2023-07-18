@@ -15,7 +15,7 @@ const Tabs = ({ tabGroup:{ tabs } }:Props) => {
             <ul className="flex w-full flex-col md:flex-row">
                 {
                     tabs.map( ({heading}, idx) => 
-                        <li id={`tab-${idx}`}>
+                        <li id={`tab-${idx}`} key={`tab-${idx}`}>
                             <TabHeader 
                                 key={`${idx}-${heading}`} 
                                 title={heading} 

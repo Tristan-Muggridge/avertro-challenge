@@ -1,6 +1,6 @@
 import MinusIcon from "../../UI/MinusIcon";
-import { KeyMeasure, ObjectiveFieldProps } from "@/types";
-import generateUUID from "../..//util/GenerateUUID";
+import { ObjectiveFieldProps } from "@/types";
+import generateUUID from "../../util/GenerateUUID";
 import { BiPlus } from "react-icons/bi";
 import TextInputField from "../Form/TextInputField";
 import { ChangeEvent } from "react";
@@ -27,7 +27,7 @@ const KeyMeasures = ({form, handleChange}: ObjectiveFieldProps) => {
                 label='Key Measures' 
                 value={form.keyMeasures[0].name} 
                 name='KeyMeasures1'
-                require={"true"}
+                required={true}
                 onChange={handleFirstKeyMeasureChange} >
                 
                 {
