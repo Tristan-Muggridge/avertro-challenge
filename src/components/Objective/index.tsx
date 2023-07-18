@@ -22,13 +22,14 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
     const [form, setForm] = useState<IObjective>({...objective});
     const [showModal, setShowModal] = useState(false);
     const [formValid, setFormValid] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         
-        validate(form) 
-            ? onUpdate(form) 
-            : alert('Invalid form');
+        if(!validate(form)) alert('Invalid form');
+        onUpdate(form);
+        setHasChanges(false); 
     }
     
     const validate = (form: IObjective) => {
@@ -43,6 +44,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
 
     const handleChange = <T extends keyof typeof form>(key: T, value: typeof form[T]) => {
         setForm( form => { return {...form, [key]: value} } )
+        setHasChanges(true);
     }
     
     const handleDelete = () => {
@@ -87,7 +89,7 @@ const Objective = ({objective, index, onUpdate, onDelete}:Props) => {
                 <KeyMeasures {...{form, handleChange}}/>
 
                 {/* Actions */}
-                <ActionButtons {...{onClickDelete: () => setShowModal(true), formValid}}/>
+                <ActionButtons {...{onClickDelete: () => setShowModal(true), formValid, hasChanges}}/>
             </form>
         </div>
     </>

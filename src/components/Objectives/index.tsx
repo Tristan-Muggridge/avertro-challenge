@@ -27,7 +27,7 @@ const maxObjectives = 3;
 
 const Objectives = () => {
     const { objectives, setObjectives } = useObjectives();
-
+    
     if (!objectives) return <div>Loading...</div>
 
     const createObjective = () => {
