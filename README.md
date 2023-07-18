@@ -4,6 +4,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 [Please view the finished challenge here](https://tristan-muggridge.github.io/avertro-challenge/)
 
+Desktop
+
+![image](https://github.com/Tristan-Muggridge/avertro-challenge/assets/89533155/557a3566-53ab-427d-9c2d-4777bf8ce67f)
+
+Mobile
+
+![image](https://github.com/Tristan-Muggridge/avertro-challenge/assets/89533155/b7a47e9b-b168-41b0-8396-d44245271c9f)
+
 ## Available Scripts
 
 In the project directory, you can run:
